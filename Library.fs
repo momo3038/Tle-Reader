@@ -1,6 +1,5 @@
 ﻿namespace TLEReader
 
-
 module FirstLineReader = 
     let getSatelliteNumber (line:string) = int line.[2..6]
     let getClassification (line:string) = line.[7]
