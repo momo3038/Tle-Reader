@@ -1,0 +1,19 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Terraform Apply for Azure
+      uses: ams0/terraform-apply-for-azure-action@v1
+      with:
+        arm_client_id: ${{ secrets.AZURE_CLIENT_ID }}
+        arm_client_secret: ${{ secrets.AZURE_CI_SECRET }}
+        arm_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        arm_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+        path: terraform/dev
