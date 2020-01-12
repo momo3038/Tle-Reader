@@ -1,7 +1,7 @@
 namespace FunctionApp
  
  module FunctionModule =
-  open Microsoft.AspNetCore.Mvc
+    open Microsoft.AspNetCore.Mvc
     open Microsoft.Azure.WebJobs
     open Microsoft.AspNetCore.Http
     open Newtonsoft.Json
