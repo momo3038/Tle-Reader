@@ -1,8 +1,11 @@
 # Configure the Azure Provider
-terraform {
-  backend "azurerm" {
+
+data "terraform_remote_state" "TleReader" {
+  backend = "azurerm"
+  config = {
     storage_account_name = "githubterraformstate"
     container_name       = "deploy"
+    key                  = "prod.terraform.tfstate"
   }
 }
 
