@@ -1,6 +1,8 @@
 # Configure the Azure Provider
 terraform {
   backend "azurerm" {
+    storage_account_name = "githubterraformstate"
+    container_name       = "deploy"
   }
 }
 
