@@ -6,7 +6,7 @@ provider "azurerm" {
 
 terraform {
   backend "azurerm" {
-    resource_group_name  = "terraform"
+    resource_group_name  = "tlereader"
     storage_account_name = "githubterraformstate"
     container_name       = "deploy"
     key                  = "prod.terraform.tfstate"
