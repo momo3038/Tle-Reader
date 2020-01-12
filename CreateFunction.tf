@@ -1,4 +1,9 @@
 # Configure the Azure Provider
+terraform {
+  backend "azurerm" {
+  }
+}
+
 provider "azurerm" {
   # whilst the `version` attribute is optional, we recommend pinning to a given version of the Provider
   version = "=1.38.0"
