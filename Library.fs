@@ -1,48 +1,67 @@
 ﻿namespace TLEReader
 
-module FirstLineReader = 
-    let getSatelliteNumber (line:string) = int line.[2..6]
-    let getClassification (line:string) = line.[7]
+module FirstLineReader =
+    let getSatelliteNumber (line: string) = int line.[2..6]
+    let getClassification (line: string) = line.[7]
 
 module InternationalDesignatorReader =
-    let getLaunchYear (line:string) = int line.[9..10]
-    let getLaunchNumberInYear (line:string) = int line.[11..13]
-    let getLaunchPiece (line:string) = int line.[14..16]
+    let getLaunchYear (line: string) = int line.[9..10]
+    let getLaunchNumberInYear (line: string) = int line.[11..13]
+    let getLaunchPiece (line: string) = int line.[14..16]
 
 module TwoLineElementReader =
-    type Classification = Unclassified = 'U' | Classified = 'C' | Secret = 'S'
-    type InternationalDesignator = { LaunchYear:int;LaunchNumberInYear:int; LaunchPiece:string }
-    type SatelliteInformations = {Name:string; Number:int;Classification:Classification;InternationalDesignator:InternationalDesignator}
-    type TwoLineElement = {Satellite:SatelliteInformations}
-    type Lines = TitleLine = 0 | Line1 = 1 | Line2 = 2
+    type Classification =
+        | Unclassified = 'U'
+        | Classified = 'C'
+        | Secret = 'S'
 
-    let splitTleRawEntry(rawTle: string) = rawTle.Split ("\n",System.StringSplitOptions.RemoveEmptyEntries)
+    type InternationalDesignator =
+        { LaunchYear: int
+          LaunchNumberInYear: int
+          LaunchPiece: string }
 
-    let trimLine (tleLine: string)  = tleLine.Trim();
-    
-    let getLine (tleLines: string[], titleLine) = trimLine tleLines.[int titleLine]
+    type SatelliteInformations =
+        { Name: string
+          Number: int
+          Classification: Classification
+          InternationalDesignator: InternationalDesignator }
+
+    type TwoLineElement =
+        { Satellite: SatelliteInformations }
+
+    type Lines =
+        | TitleLine = 0
+        | Line1 = 1
+        | Line2 = 2
+
+    let splitTleRawEntry (rawTle: string) = rawTle.Split("\n", System.StringSplitOptions.RemoveEmptyEntries)
+
+    let trimLine (tleLine: string) = tleLine.Trim()
+
+    let getLine (tleLines: string [], titleLine) = trimLine tleLines.[int titleLine]
 
     let toClassification value =
         match value with
-            | 'U' -> Classification.Unclassified
-            | 'S' -> Classification.Secret
-            | 'C' -> Classification.Classified
-            | _ -> Classification.Unclassified
+        | 'U' -> Classification.Unclassified
+        | 'S' -> Classification.Secret
+        | 'C' -> Classification.Classified
+        | _ -> Classification.Unclassified
 
-    let satelliteInformations (rawTle) = 
-       let lines = splitTleRawEntry rawTle
-       let titleName = getLine (lines, Lines.TitleLine)
-       let firstLine = getLine (lines, Lines.Line1)
-       let secondLine = getLine (lines, Lines.Line2)
+    let satelliteInformations (rawTle) =
+        let lines = splitTleRawEntry rawTle
+        let titleName = getLine (lines, Lines.TitleLine)
+        let firstLine = getLine (lines, Lines.Line1)
+        let secondLine = getLine (lines, Lines.Line2)
 
-       //printfn "Title line %s FirstLine %s and second line %s" titleName firstLine secondLine
+        //printfn "Title line %s FirstLine %s and second line %s" titleName firstLine secondLine
 
-       {
-        Name=titleName;
-        Number= FirstLineReader.getSatelliteNumber firstLine;
-        Classification= toClassification (FirstLineReader.getClassification firstLine);
-        InternationalDesignator= { LaunchYear= InternationalDesignatorReader.getLaunchYear firstLine; LaunchPiece="A"; LaunchNumberInYear = 0 }
-       }
+        { Name = titleName
+          Number = FirstLineReader.getSatelliteNumber firstLine
+          Classification = toClassification (FirstLineReader.getClassification firstLine)
+          InternationalDesignator =
+              { LaunchYear = InternationalDesignatorReader.getLaunchYear firstLine
+                LaunchPiece = "A"
+                LaunchNumberInYear = 0 } }
 
     let ReadFromString value = printfn "You provided the following TLE value %s%s" System.Environment.NewLine value
 
