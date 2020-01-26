@@ -40,6 +40,7 @@ resource "azurerm_app_service_plan" "TleReader" {
 
 resource "azurerm_function_app" "TleReader" {
   name                      = "TleReader"
+  version                   = "~2"
   location                  = azurerm_resource_group.TleReader.location
   resource_group_name       = azurerm_resource_group.TleReader.name
   app_service_plan_id       = azurerm_app_service_plan.TleReader.id
