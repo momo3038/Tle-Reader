@@ -26,5 +26,5 @@ namespace FunctionApp
                 |> Async.AwaitTask
 
             let tle = JsonConvert.DeserializeObject<User>(body)
-            return JsonResult(TwoLineElementReader.satelliteInformations tle.Tle)
+            return JsonResult(TwoLineElementReader.parseSatelliteInformations tle.Tle)
         } |> Async.StartAsTask
