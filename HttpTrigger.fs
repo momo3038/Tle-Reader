@@ -4,15 +4,9 @@ namespace FunctionApp
     open Microsoft.AspNetCore.Mvc
     open Microsoft.Azure.WebJobs
     open Microsoft.AspNetCore.Http
-    open Newtonsoft.Json
     open System.IO
     open Microsoft.Extensions.Logging
     open TLEReader
-    
-
-    type User = {
-        Tle: string
-    }
 
     [<FunctionName("ReadTle")>]
     let Run ([<HttpTrigger(Methods=[|"POST"|])>] req:HttpRequest) (log:ILogger) = 
@@ -25,6 +19,12 @@ namespace FunctionApp
                 |> (fun stream -> stream.ReadToEndAsync()) 
                 |> Async.AwaitTask
 
-            let tle = JsonConvert.DeserializeObject<User>(body)
-            return JsonResult(TwoLineElementReader.parseSatelliteInformations tle.Tle)
+            let result =
+                match body with
+                | null -> BadRequestResult() :> ActionResult
+                | "" -> BadRequestResult() :> ActionResult
+                | _ -> JsonResult(TwoLineElementReader.parseSatelliteInformations body) :> ActionResult
+
+            return result
+
         } |> Async.StartAsTask
